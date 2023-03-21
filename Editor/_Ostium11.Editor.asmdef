@@ -1,0 +1,18 @@
+{
+    "name": "Ostium11.Editor",
+    "rootNamespace": "Ostium11.Editor",
+    "references": [
+        "GUID:15bcb45d4972602498b9c040e4e30e3b"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
