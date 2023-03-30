@@ -150,6 +150,7 @@ namespace Ostium11
 
         [SerializeField] bool _collectInput = true;
         [SerializeField, Range(1, 50)] float _pivotDst = 10;
+        [SerializeField] Vector2 _pivotDstMinMax = new Vector2(1, 100);
         [SerializeField] float _sensitivity;
         [SerializeField] ControlScheme _controlScheme;
         [SerializeField] Camera _cam;
@@ -249,7 +250,7 @@ namespace Ostium11
                     break;
                 case ZoomAction.MoveToPivot:
                     var oldDst = _pivotDst;
-                    _pivotDst /= percent;
+                    _pivotDst = Mathf.Clamp(_pivotDst / percent, _pivotDstMinMax.x, _pivotDstMinMax.y);
                     _camTransform.position += _camTransform.forward * (oldDst - _pivotDst);
                     break;
                 case ZoomAction.MoveZ:
