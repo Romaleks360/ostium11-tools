@@ -12,8 +12,14 @@ namespace Ostium11
 
         public static Color32 ToColor32(int value)
         {
-            color32.Value = value;
-            return color32.Result;
+            color32.Int = value;
+            return color32.Color32;
+        }
+
+        public static int ToInt(Color32 value)
+        {
+            color32.Color32 = value;
+            return color32.Int;
         }
     }
 
@@ -48,7 +54,7 @@ namespace Ostium11
     [StructLayout(LayoutKind.Explicit)]
     struct ConvertColor32
     {
-        [FieldOffset(0)] public int Value;
-        [FieldOffset(0)] public Color32 Result;
+        [FieldOffset(0)] public int Int;
+        [FieldOffset(0)] public Color32 Color32;
     }
 }
