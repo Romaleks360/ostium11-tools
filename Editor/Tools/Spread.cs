@@ -7,7 +7,7 @@ namespace Ostium11.Editor
     public class Spread : EditorWindow
     {
         [MenuItem("Tools/Spread")]
-        static void Run() => GetWindow<Spread>();
+        static void Run() => GetWindow<Spread>("Spread", true);
 
         Vector3 _pos;
         Vector3 _rot;
