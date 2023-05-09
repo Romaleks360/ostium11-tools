@@ -8,7 +8,7 @@ namespace Ostium11
     /// Use this to await events.
     /// </summary>
     /// <typeparam name="T">Task return type</typeparam>
-    public struct WaitForEvent<T>
+    public class WaitForEvent<T>
     {
         readonly TaskCompletionSource<T> _tcs;
         readonly Action<Action<T>> _unsubscribe;
@@ -17,12 +17,7 @@ namespace Ostium11
         /// Usage:
         /// <c> await new WaitForEvent(listener => someEvent += listener); </c>
         /// </summary>
-        public WaitForEvent(Action<Action<T>> subscribe)
-        {
-            _tcs = new TaskCompletionSource<T>();
-            _unsubscribe = null;
-            subscribe(Stop);
-        }
+        public WaitForEvent(Action<Action<T>> subscribe) : this(subscribe, null) { }
 
         /// <summary>
         /// Usage:
@@ -32,18 +27,14 @@ namespace Ostium11
         {
             _tcs = new TaskCompletionSource<T>();
             _unsubscribe = unsubscribe;
-            subscribe(Stop);
+            subscribe(Complete);
         }
 
         public TaskAwaiter<T> GetAwaiter() => _tcs.Task.GetAwaiter();
 
-        public Task<T> Task => _tcs.Task;
-
-        public void Complete(T result) => Stop(result);
-
-        void Stop(T result)
+        public void Complete(T result)
         {
-            _unsubscribe?.Invoke(Stop);
+            _unsubscribe?.Invoke(Complete);
             _tcs.SetResult(result);
         }
     }
