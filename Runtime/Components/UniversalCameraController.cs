@@ -272,7 +272,7 @@ namespace Ostium11
         }
 
         [Conditional("UNITY_EDITOR")]
-        void OnDrawGizmos()
+        void OnDrawGizmosSelected()
         {
             if (_cam == null) return;
             var pivotPos = _cam.transform.position + _cam.transform.forward * _pivotDst;
