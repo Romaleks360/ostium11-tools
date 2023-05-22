@@ -70,5 +70,10 @@ namespace Ostium11.Extensions
         {
             return (point - center).sqrMagnitude <= radius * radius;
         }
+
+        public static Vector2 Clamp(this Vector2 vector, float min, float max)
+        {
+            return new Vector2(Mathf.Clamp(vector.x, min, max), Mathf.Clamp(vector.y, min, max));
+        }
     }
 }
