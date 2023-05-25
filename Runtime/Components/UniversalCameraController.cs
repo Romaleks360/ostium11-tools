@@ -158,7 +158,9 @@ namespace Ostium11
         int _dpi;
         Transform _camTransform;
         List<IInputProvider> _inputs;
-        Transform _target;
+        Transform _stickTarget;
+
+        public Camera Camera => _cam;
 
         public bool CollectInput
         {
@@ -191,6 +193,12 @@ namespace Ostium11
 
         void LateUpdate()
         {
+            if (_stickTarget != null)
+            {
+                _camTransform.SetPositionAndRotation(_stickTarget.position, _stickTarget.rotation);
+                return;
+            }
+
             if (_collectInput && TryGetInput(out var input))
             {
                 input.dragDelta /= _dpi;
@@ -199,19 +207,11 @@ namespace Ostium11
                 ApplyDrag(input.altDragDelta, _controlScheme.altDragAction);
                 ApplyZoom(input.zoomDelta, input.zoomCenter, _controlScheme.zoomAction);
             }
-            else if (_target != null)
-            {
-                _camTransform.SetPositionAndRotation(_target.position, _target.rotation);
-            }
         }
 
-        public void StickTo(Transform target)
-        {
-            _collectInput = false;
-            _target = target;
-        }
+        public void StickTo(Transform target) => _stickTarget = target;
 
-        public void Unstick() => _target = null;
+        public void Unstick() => _stickTarget = null;
 
         bool TryGetInput(out InputData inputData)
         {
