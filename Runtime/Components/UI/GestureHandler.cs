@@ -6,8 +6,9 @@ namespace Ostium11.UI
 {
     public class GestureHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        readonly float _tapTime = 0.3f;
-        readonly float _holdTime = 0.5f;
+        [SerializeField] float _tapTime = 0.2f;
+        [SerializeField] float _holdTime = 0.3f;
+
         readonly float _tapMoveThresholdSqr = 100f;
 
         PointerEventData _holdPointer;
@@ -20,7 +21,7 @@ namespace Ostium11.UI
         public event Action<PointerEventData> Drag;
         public event Action<PointerEventData> EndDrag;
 
-        public virtual void Update()
+        protected virtual void Update()
         {
             if (_holdPointer == null)
                 return;
@@ -38,20 +39,20 @@ namespace Ostium11.UI
             _holdPointer = null;
         }
 
-        public virtual void OnPointerDown(PointerEventData eventData)
+        public void OnPointerDown(PointerEventData eventData)
         {
             PointerDown?.Invoke(eventData);
             _holdPointer ??= eventData;
         }
 
-        public virtual void OnPointerUp(PointerEventData eventData)
+        public void OnPointerUp(PointerEventData eventData)
         {
             PointerUp?.Invoke(eventData);
             if (_holdPointer?.pointerId == eventData.pointerId)
                 _holdPointer = null;
         }
 
-        public virtual void OnPointerClick(PointerEventData eventData)
+        public void OnPointerClick(PointerEventData eventData)
         {
             if ((eventData.position - eventData.pressPosition).sqrMagnitude > _tapMoveThresholdSqr)
                 return;
@@ -62,11 +63,11 @@ namespace Ostium11.UI
             Tap?.Invoke(eventData.position);
         }
 
-        public virtual void OnBeginDrag(PointerEventData eventData) => BeginDrag?.Invoke(eventData);
+        public void OnBeginDrag(PointerEventData eventData) => BeginDrag?.Invoke(eventData);
 
-        public virtual void OnDrag(PointerEventData eventData) => Drag?.Invoke(eventData);
+        public void OnDrag(PointerEventData eventData) => Drag?.Invoke(eventData);
 
-        public virtual void OnEndDrag(PointerEventData eventData) => EndDrag?.Invoke(eventData);
+        public void OnEndDrag(PointerEventData eventData) => EndDrag?.Invoke(eventData);
     }
 
 }
