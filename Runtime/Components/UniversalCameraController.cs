@@ -24,7 +24,7 @@ namespace Ostium11
 
         enum ZoomAction { None, Fov, OrthoSize, MoveToPivot, MoveZ }
 
-        [System.Serializable]
+        [Serializable]
         struct ControlScheme
         {
             public DragAction dragAction;
@@ -146,10 +146,19 @@ namespace Ostium11
 
         #endregion
 
+        public class POV
+        {
+            public Vector3 Position;
+            public Vector3 Rotation;
+            public float PivotDst;
+            public float Fov;
+            public float OrthoSize;
+        }
+
         #endregion
 
         [SerializeField] bool _collectInput = true;
-        [SerializeField, Range(1, 50)] float _pivotDst = 10;
+        [SerializeField] float _pivotDst = 10;
         [SerializeField] Vector2 _pivotDstMinMax = new Vector2(1, 100);
         [SerializeField] float _sensitivity;
         [SerializeField] ControlScheme _controlScheme;
@@ -213,6 +222,24 @@ namespace Ostium11
 
         public void Unstick() => _stickTarget = null;
 
+        public POV GetCurrentPOV() => new POV()
+        {
+            Position = _camTransform.position,
+            Rotation = _camTransform.eulerAngles,
+            PivotDst = _pivotDst,
+            Fov = _cam.fieldOfView,
+            OrthoSize = _cam.orthographicSize,
+        };
+
+        public void ApplyPOV(POV pov)
+        {
+            _camTransform.position = pov.Position;
+            _camTransform.eulerAngles = pov.Rotation;
+            _pivotDst = pov.PivotDst;
+            _cam.fieldOfView = pov.Fov;
+            _cam.orthographicSize = pov.OrthoSize;
+        }
+
         bool TryGetInput(out InputData inputData)
         {
             foreach (var input in _inputs)
@@ -267,7 +294,7 @@ namespace Ostium11
                     _camTransform.position += _camTransform.forward * (oldDst - _pivotDst);
                     break;
                 case ZoomAction.MoveZ:
-                    _camTransform.position += _camTransform.forward * (percent - 1f) * _sensitivity;
+                    _camTransform.position += _camTransform.forward * ((percent - 1f) * _sensitivity);
                     break;
             }
 
