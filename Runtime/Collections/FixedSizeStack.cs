@@ -8,13 +8,13 @@ namespace Ostium11
 
         public int Size { get; set; }
 
+        public int Count => _list.Count;
+
         public FixedSizeStack(int size)
         {
             _list = new LinkedList<T>();
             Size = size;
         }
-
-        public bool IsEmpty => _list.Count == 0;
 
         public void Push(T obj)
         {
