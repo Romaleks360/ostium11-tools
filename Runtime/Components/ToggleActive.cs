@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Ostium11
+namespace Ostium11.Components
 {
     public class ToggleActive : MonoBehaviour
     {

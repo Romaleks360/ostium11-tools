@@ -4,7 +4,7 @@ using System.Diagnostics;
 using Ostium11.Extensions;
 using UnityEngine;
 
-namespace Ostium11
+namespace Ostium11.Components
 {
     public class UniversalCameraController : MonoBehaviour
     {

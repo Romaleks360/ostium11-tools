@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Ostium11
+namespace Ostium11.Components
 {
     public class EventTrigger : MonoBehaviour
     {
@@ -24,9 +24,9 @@ namespace Ostium11
 
         [SerializeField] List<Event> _events;
 
-        void Awake()     => Invoke(EventType.Awake);
-        void Start()     => Invoke(EventType.Start);
-        void OnEnable()  => Invoke(EventType.OnEnable);
+        void Awake() => Invoke(EventType.Awake);
+        void Start() => Invoke(EventType.Start);
+        void OnEnable() => Invoke(EventType.OnEnable);
         void OnDisable() => Invoke(EventType.OnDisable);
         void OnDestroy() => Invoke(EventType.OnDestroy);
 
