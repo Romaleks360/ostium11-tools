@@ -9,7 +9,7 @@ namespace Ostium11.UI
         [SerializeField] float _tapTime = 0.2f;
         [SerializeField] float _holdTime = 0.3f;
 
-        readonly float _tapMoveThresholdSqr = 100f;
+        readonly float _tapMoveThresholdSqr = 10;
 
         PointerEventData _holdPointer;
 
