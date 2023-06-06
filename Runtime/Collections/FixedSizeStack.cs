@@ -14,6 +14,8 @@ namespace Ostium11
             Size = size;
         }
 
+        public bool IsEmpty => _list.Count == 0;
+
         public void Push(T obj)
         {
             _list.AddFirst(obj);
