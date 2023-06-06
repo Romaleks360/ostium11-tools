@@ -23,11 +23,6 @@ namespace Ostium11
                 _list.RemoveLast();
         }
 
-        public T Peek()
-        {
-            return _list.First.Value;
-        }
-
         public T Pop()
         {
             var obj = _list.First.Value;
@@ -35,5 +30,8 @@ namespace Ostium11
             return obj;
         }
 
+        public T Peek() => _list.First.Value;
+
+        public void Clear() => _list.Clear();
     }
 }
