@@ -9,12 +9,10 @@ namespace Ostium11.UI
         [SerializeField] float _tapTime = 0.2f;
         [SerializeField] float _holdTime = 0.3f;
 
-        readonly float _tapMoveThresholdSqr = 10;
-
         PointerEventData _holdPointer;
 
         public event Action<Vector2> Tap;
-        public event Action<Vector2> Hold;
+        public event Action<PointerEventData> Hold;
         public event Action<PointerEventData> PointerDown;
         public event Action<PointerEventData> PointerUp;
         public event Action<PointerEventData> BeginDrag;
@@ -26,7 +24,7 @@ namespace Ostium11.UI
             if (_holdPointer == null)
                 return;
 
-            if ((_holdPointer.position - _holdPointer.pressPosition).sqrMagnitude > _tapMoveThresholdSqr)
+            if ((_holdPointer.position - _holdPointer.pressPosition).sqrMagnitude > 1)
             {
                 _holdPointer = null;
                 return;
@@ -35,26 +33,28 @@ namespace Ostium11.UI
             if (Time.unscaledTime - _holdPointer.clickTime < _holdTime)
                 return;
 
-            Hold?.Invoke(_holdPointer.position);
+            Hold?.Invoke(_holdPointer);
             _holdPointer = null;
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
             PointerDown?.Invoke(eventData);
-            _holdPointer ??= eventData;
+            if (_holdPointer == null)
+                _holdPointer = eventData;
+            else
+                _holdPointer = null;
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
             PointerUp?.Invoke(eventData);
-            if (_holdPointer?.pointerId == eventData.pointerId)
-                _holdPointer = null;
+            _holdPointer = null;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if ((eventData.position - eventData.pressPosition).sqrMagnitude > _tapMoveThresholdSqr)
+            if ((eventData.position - eventData.pressPosition).sqrMagnitude > 1)
                 return;
 
             if (Time.unscaledTime - eventData.clickTime > _tapTime)
