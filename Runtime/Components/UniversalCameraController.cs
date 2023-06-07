@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Ostium11.Extensions;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Ostium11.Components
 {
@@ -46,10 +46,13 @@ namespace Ostium11.Components
         class MouseInput : IInputProvider
         {
             Vector2 _prevMousePos;
+            bool _enabled = true;
 
-            public MouseInput() => _prevMousePos = Input.mousePosition;
-
-            public void Reset() => _prevMousePos = Input.mousePosition;
+            public void Reset()
+            {
+                _prevMousePos = Input.mousePosition;
+                _enabled = true;
+            }
 
             public bool TryGetInput(out InputData input)
             {
@@ -62,7 +65,19 @@ namespace Ostium11.Components
                 Vector2 mousePos = Input.mousePosition;
 
                 if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+                {
                     _prevMousePos = mousePos;
+                    _enabled = !EventSystem.current.IsPointerOverGameObject();
+                }
+
+                if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))
+                    _enabled = true;
+
+                if (!_enabled)
+                {
+                    input = new InputData();
+                    return false;
+                }
 
                 input = new InputData()
                 {
@@ -82,27 +97,38 @@ namespace Ostium11.Components
         {
             Vector2? _prevTouchPos;
             Vector3? _prevPinchPos;
+            bool _enabled = true;
 
             public void Reset()
             {
                 _prevTouchPos = null;
                 _prevPinchPos = null;
+                _enabled = true;
             }
 
             public bool TryGetInput(out InputData input)
             {
                 if (Input.touchCount == 0)
                 {
-                    _prevTouchPos = null;
-                    _prevPinchPos = null;
-
+                    Reset();
                     input = new InputData();
                     return false;
                 }
                 else if (Input.touchCount == 1)
                 {
+                    var touch = Input.GetTouch(0);
+                    if (_prevTouchPos == null)
+                        _enabled = !EventSystem.current.IsPointerOverGameObject(touch.fingerId);
+
+                    if (!_enabled)
+                    {
+                        _prevTouchPos = touch.position;
+                        input = new InputData();
+                        return false;
+                    }
+
                     var dragDelta = Vector2.zero;
-                    var touchPos = Input.GetTouch(0).position;
+                    var touchPos = touch.position;
 
                     if (_prevTouchPos != null)
                         dragDelta = touchPos - _prevTouchPos.Value;
@@ -115,6 +141,12 @@ namespace Ostium11.Components
                 }
                 else
                 {
+                    if (!_enabled)
+                    {
+                        input = new InputData();
+                        return false;
+                    }
+
                     var altDragDelta = Vector2.zero;
                     var zoomDelta = 0f;
 
@@ -311,7 +343,7 @@ namespace Ostium11.Components
                 input.Reset();
         }
 
-        [Conditional("UNITY_EDITOR")]
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
         void OnDrawGizmosSelected()
         {
             if (_cam == null) return;
