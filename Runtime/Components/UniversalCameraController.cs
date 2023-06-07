@@ -87,6 +87,11 @@ namespace Ostium11.Components
                     zoomDelta = Input.mouseScrollDelta.y / 10,
                 };
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+                input.dragDelta /= 5;
+                input.altDragDelta /= 5;
+#endif
+
                 _prevMousePos = mousePos;
 
                 return true;
