@@ -66,6 +66,11 @@ namespace Ostium11.Extensions
             return new Vector3Int((int)point.x, (int)point.y, (int)point.z);
         }
 
+        public static Vector3Int FloorToVector3Int(this Vector3 point)
+        {
+            return new Vector3Int(Mathf.FloorToInt(point.x), Mathf.FloorToInt(point.y), Mathf.FloorToInt(point.z));
+        }
+
         public static Vector3 Clamp(this Vector3 vector, float min, float max)
         {
             return new Vector3(Mathf.Clamp(vector.x, min, max), Mathf.Clamp(vector.y, min, max), Mathf.Clamp(vector.z, min, max));
