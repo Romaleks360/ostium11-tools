@@ -301,7 +301,14 @@ namespace Ostium11.Components
                     var pivot = _camTransform.position + _camTransform.forward * _pivotDst;
                     _camTransform.RotateAround(pivot, Vector3.up, delta.x);
                     _camTransform.RotateAround(pivot, _camTransform.right, -delta.y);
-                    _camTransform.LookAt(pivot);
+
+                    var up = _camTransform.up;
+                    if (up.y < 0)
+                    {
+                        var angle = Vector3.Angle(up, Vector3.up) - 90;
+                        _camTransform.RotateAround(pivot, _camTransform.right, angle * Mathf.Sign(_camTransform.forward.y));
+                    }
+
                     break;
                 case DragAction.MoveXY:
                     var plane = new Plane(_camTransform.forward, _camTransform.position + _camTransform.forward * _pivotDst);
