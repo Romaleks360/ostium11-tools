@@ -308,7 +308,6 @@ namespace Ostium11.Components
                         var angle = Vector3.Angle(up, Vector3.up) - 90;
                         _camTransform.RotateAround(pivot, _camTransform.right, angle * Mathf.Sign(_camTransform.forward.y));
                     }
-
                     break;
                 case DragAction.MoveXY:
                     var plane = new Plane(_camTransform.forward, _camTransform.position + _camTransform.forward * _pivotDst);
@@ -334,8 +333,9 @@ namespace Ostium11.Components
                     break;
                 case ZoomAction.MoveToPivot:
                     var oldDst = _pivotDst;
-                    _pivotDst = Mathf.Clamp(_pivotDst / percent, _pivotDstMinMax.x, _pivotDstMinMax.y);
+                    _pivotDst /= percent;
                     _camTransform.position += _camTransform.forward * (oldDst - _pivotDst);
+                    _pivotDst = Mathf.Clamp(_pivotDst, _pivotDstMinMax.x, _pivotDstMinMax.y);
                     break;
                 case ZoomAction.MoveZ:
                     _camTransform.position += _camTransform.forward * ((percent - 1f) * _sensitivity);
