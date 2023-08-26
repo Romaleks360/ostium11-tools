@@ -6,7 +6,7 @@ namespace Ostium11
     [System.Serializable]
     public class SerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
     {
-        [SerializeField] List<Pair> _pairs;
+        [SerializeField] List<Pair> _pairs = new();
 
         public void OnAfterDeserialize()
         {
