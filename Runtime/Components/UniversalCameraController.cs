@@ -64,13 +64,13 @@ namespace Ostium11.Components
 
                 Vector2 mousePos = Input.mousePosition;
 
-                if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+                if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2))
                 {
                     _prevMousePos = mousePos;
                     _enabled = !EventSystem.current.IsPointerOverGameObject();
                 }
 
-                if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))
+                if (Input.GetMouseButtonUp(1) || Input.GetMouseButtonUp(2))
                     _enabled = true;
 
                 if (!_enabled)
@@ -81,8 +81,8 @@ namespace Ostium11.Components
 
                 input = new InputData()
                 {
-                    dragDelta = Input.GetMouseButton(0) ? mousePos - _prevMousePos : Vector2.zero,
-                    altDragDelta = Input.GetMouseButton(1) ? mousePos - _prevMousePos : Vector2.zero,
+                    dragDelta = Input.GetMouseButton(1) ? mousePos - _prevMousePos : Vector2.zero,
+                    altDragDelta = Input.GetMouseButton(2) ? mousePos - _prevMousePos : Vector2.zero,
                     zoomCenter = mousePos,
                     zoomDelta = Input.mouseScrollDelta.y / 10,
                 };
