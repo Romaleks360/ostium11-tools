@@ -11,7 +11,7 @@ namespace Ostium11.UI
 
         PointerEventData _holdPointer;
 
-        public event Action<Vector2> Tap;
+        public event Action<PointerEventData> Tap;
         public event Action<PointerEventData> Hold;
         public event Action<PointerEventData> PointerDown;
         public event Action<PointerEventData> PointerUp;
@@ -60,7 +60,7 @@ namespace Ostium11.UI
             if (Time.unscaledTime - eventData.clickTime > _tapTime)
                 return;
 
-            Tap?.Invoke(eventData.position);
+            Tap?.Invoke(eventData);
         }
 
         public void OnBeginDrag(PointerEventData eventData) => BeginDrag?.Invoke(eventData);
