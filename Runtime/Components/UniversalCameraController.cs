@@ -208,6 +208,12 @@ namespace Ostium11.Components
 
         public Camera Camera => _cam;
 
+        public float PivotDistance
+        {
+            get => _pivotDst;
+            set => _pivotDst = value;
+        }
+
         public bool CollectInput
         {
             get => _collectInput;
