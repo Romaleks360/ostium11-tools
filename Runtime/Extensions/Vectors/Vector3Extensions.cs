@@ -40,6 +40,12 @@ namespace Ostium11.Extensions
             return vector;
         }
 
+        public static Vector3 Set(this Vector3 vector, int axis, float value)
+        {
+            vector[axis] = value;
+            return vector;
+        }
+
         public static Vector3 SwapYZ(this Vector3 vector)
         {
             (vector.z, vector.y) = (vector.y, vector.z);
@@ -64,6 +70,11 @@ namespace Ostium11.Extensions
         public static Vector3Int ToVector3Int(this Vector3 point)
         {
             return new Vector3Int((int)point.x, (int)point.y, (int)point.z);
+        }
+
+        public static Vector3Int RoundToVector3Int(this Vector3 point)
+        {
+            return new Vector3Int(Mathf.RoundToInt(point.x), Mathf.RoundToInt(point.y), Mathf.RoundToInt(point.z));
         }
 
         public static Vector3Int FloorToVector3Int(this Vector3 point)
