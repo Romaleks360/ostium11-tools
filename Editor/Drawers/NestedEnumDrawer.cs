@@ -2,7 +2,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace Ostium11.Editor
+namespace Ostium11.Editors
 {
     [CustomPropertyDrawer(typeof(NestedEnumAttribute))]
     public class NestedEnumDrawer : PropertyDrawer

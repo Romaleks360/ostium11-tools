@@ -2,7 +2,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace Ostium11.Editor
+namespace Ostium11.Editors
 {
     public class Spread : EditorWindow
     {

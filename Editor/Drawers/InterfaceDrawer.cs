@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace Ostium11.Editor
+namespace Ostium11.Editors
 {
     [CustomPropertyDrawer(typeof(Interface<>))]
     public class InterfaceDrawer : PropertyDrawer
