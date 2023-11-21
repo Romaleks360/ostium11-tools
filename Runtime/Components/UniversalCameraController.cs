@@ -214,6 +214,8 @@ namespace Ostium11.Components
             set => _pivotDst = value;
         }
 
+        public Transform StickTarget => _stickTarget;
+
         public bool CollectInput
         {
             get => _collectInput;
