@@ -12,5 +12,11 @@ namespace Ostium11.Extensions
         public static int ToInt(this Color32 c) => Bytes.ToInt(c);
 
         public static void FromInt(this ref Color32 c, int value) => c = Bytes.ToColor32(value);
+
+        public static Color32 SetAlpha(this Color32 c, byte alpha)
+        {
+            c.a = alpha;
+            return c;
+        }
     }
 }
