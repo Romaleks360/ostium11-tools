@@ -19,6 +19,9 @@ namespace Ostium11.Extensions
             target.position = pos;
         }
 
+        public static void SetPivot(this RectTransform rectTransform, float pivotX, float pivotY) =>
+            SetPivot(rectTransform, new Vector2(pivotX, pivotY));
+
         public static void SetAnchors(this RectTransform rectTransform, Vector2 anchorPoint)
         {
             var pos = rectTransform.localPosition;
@@ -26,6 +29,9 @@ namespace Ostium11.Extensions
             rectTransform.anchorMax = anchorPoint;
             rectTransform.localPosition = pos;
         }
+
+        public static void SetAnchors(this RectTransform rectTransform, float anchorX, float anchorY) =>
+            SetAnchors(rectTransform, new Vector2(anchorX, anchorY));
 
         public static Rect GetWorldRect(this RectTransform rectTransform)
         {
