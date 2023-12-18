@@ -38,5 +38,30 @@ namespace Ostium11.Extensions
             rectTransform.GetWorldCorners(_corners);
             return new Rect(_corners[0], _corners[2] - _corners[0]);
         }
+
+        public static void SnapAnchorsToRect(this RectTransform rt)
+        {
+            var parent = (RectTransform)rt.parent;
+            rt.anchorMin = PointToNormalizedUnclamped(parent.rect, (Vector2)rt.localPosition + rt.rect.min);
+            rt.anchorMax = PointToNormalizedUnclamped(parent.rect, (Vector2)rt.localPosition + rt.rect.max);
+            rt.sizeDelta = Vector2.zero;
+            rt.anchoredPosition = Vector2.zero;
+
+            // like Rect.PointToNormalzed but can go beyond 0-1
+            static Vector2 PointToNormalizedUnclamped(Rect rectangle, Vector2 point)
+            {
+                return new Vector2(
+                    InverseLerpUnclamped(rectangle.x, rectangle.xMax, point.x),
+                    InverseLerpUnclamped(rectangle.y, rectangle.yMax, point.y));
+            }
+
+            // like Mathf.InverseLerp but can go beyond 0-1
+            static float InverseLerpUnclamped(float a, float b, float value)
+            {
+                if (a != b)
+                    return (value - a) / (b - a);
+                return 0;
+            }
+        }
     }
 }
