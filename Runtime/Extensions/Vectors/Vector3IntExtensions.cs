@@ -22,6 +22,12 @@ namespace Ostium11.Extensions
             return vector;
         }
 
+        public static Vector3Int SwapXZ(this Vector3Int vector)
+        {
+            (vector.z, vector.x) = (vector.x, vector.z);
+            return vector;
+        }
+
         public static Vector3Int SwapYZ(this Vector3Int vector)
         {
             (vector.z, vector.y) = (vector.y, vector.z);
