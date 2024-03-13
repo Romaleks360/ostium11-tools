@@ -214,7 +214,7 @@ namespace Ostium11.Components
             set => _pivotDst = value;
         }
 
-        public Transform StickTarget => _stickTarget;
+        public Transform StickTarget { get => _stickTarget; set => _stickTarget = value; }
 
         public bool CollectInput
         {
@@ -262,10 +262,6 @@ namespace Ostium11.Components
                 ApplyZoom(input.zoomDelta, input.zoomCenter, _controlScheme.zoomAction);
             }
         }
-
-        public void StickTo(Transform target) => _stickTarget = target;
-
-        public void Unstick() => _stickTarget = null;
 
         public POV GetCurrentPOV() => new POV()
         {
