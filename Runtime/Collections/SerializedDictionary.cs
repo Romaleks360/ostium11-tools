@@ -10,58 +10,20 @@ namespace Ostium11
 
         public void OnAfterDeserialize()
         {
+            Clear();
             foreach (var pair in _pairs)
                 if (!ContainsKey(pair.key))
                     Add(pair.key, pair.value);
-
-            if (!HasMissingEnumKeys(out var keyType, out var enumValuesArray))
-                return;
-            Stack<int> idsToRemove = new();
-
-            for (int i = 0; i < _pairs.Count; i++)
-                if (!keyType.IsEnumDefined(_pairs[i].key))
-                {
-                    idsToRemove.Push(i);
-                    Remove(_pairs[i].key);
-                }
-
-            while (idsToRemove.Count > 0)
-                _pairs.RemoveAt(idsToRemove.Pop());
         }
 
         public void OnBeforeSerialize()
         {
-            if (!HasMissingEnumKeys(out var keyType, out var enumValues))
+            if (!Application.isPlaying)
                 return;
 
-            foreach (var enumValue in enumValues)
-                if (_pairs.FindIndex(p => p.key.Equals((TKey)enumValue)) == -1)
-                    _pairs.Add(new Pair((TKey)enumValue, default));
-        }
-
-        bool HasMissingEnumKeys(out System.Type keyType, out System.Array values)
-        {
-            values = null;
-
-            keyType = typeof(TKey);
-            if (!keyType.IsEnum)
-                return false;
-
-            values = keyType.GetEnumValues();
-            bool hasMissingValues = true;
-
-            if (values.Length == _pairs.Count)
-            {
-                for (int i = 0; i < _pairs.Count; i++)
-                    if (!values.GetValue(i).Equals(_pairs[i].key))
-                        goto Skip;
-
-                hasMissingValues = false;
-            }
-
-            Skip:
-
-            return hasMissingValues;
+            _pairs.Clear();
+            foreach (var (k, v) in this)
+                _pairs.Add(new Pair(k, v));
         }
 
         [System.Serializable]
