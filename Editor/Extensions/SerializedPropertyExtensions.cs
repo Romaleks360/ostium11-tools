@@ -16,7 +16,7 @@ namespace Ostium11.Editors
                 throw new System.Exception("Invalid operation: SerializedProperty is not a member of an array!");
             int length = 0;
             int i = property.propertyPath.Length - 2;
-            while (property.propertyPath[i].IsTrueDigit())
+            while (property.propertyPath[i].IsDigit())
             {
                 length++;
                 i--;
