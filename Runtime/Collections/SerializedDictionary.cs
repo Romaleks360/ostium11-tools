@@ -21,6 +21,11 @@ namespace Ostium11
             if (!Application.isPlaying)
                 return;
 
+            ForceUpdateSerializedData();
+        }
+
+        public void ForceUpdateSerializedData()
+        {
             _pairs.Clear();
             foreach (var (k, v) in this)
                 _pairs.Add(new Pair(k, v));
