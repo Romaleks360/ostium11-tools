@@ -53,39 +53,50 @@ namespace Ostium11.Editors
 
         void Init(SerializedProperty prop)
         {
+            // Unity Serialization Bug: inside nested PropertyDrawer, enumDisplayNames returns enum names of the parent enum property!
+            // And enumValueIndex is clamped to the parent's enum size
+            // To support nested enums we use fieldInfo
+            // https://gamedev.stackexchange.com/questions/198784/unity-custom-editor-nested-property-drawer-is-getting-enum-names-for-the-paren
+
             if (_reorderableLists.ContainsKey(prop.propertyPath))
                 return;
 
-            var unconstructedType = typeof(SerializedDictionary<,>);
-            System.Type keysType = null;
+            var pairs = prop.FindPropertyRelative("_pairs");
 
-            Queue<System.Type> queueOfTypes = new Queue<System.Type>();
-            foreach (var t in fieldInfo.FieldType.GetGenericArguments())
-                queueOfTypes.Enqueue(t);
-
-            while (queueOfTypes.Count > 0)
-            {
-                keysType = queueOfTypes.Dequeue();
-
-                if (keysType.IsGenericType)
-                {
-                    if (unconstructedType == keysType.GetGenericTypeDefinition())
-                    {
-                        keysType = keysType.GetGenericArguments()[0];
-                        break;
-                    }
-                    else
-                        foreach (var t in keysType.GetGenericArguments())
-                            queueOfTypes.Enqueue(t);
-                }
-                else
-                    break;
-            }
+            System.Type keysType = fieldInfo.FieldType.GetGenericArguments()[0];
 
             bool isEnum = keysType.IsEnum;
 
+            if (isEnum)
+            {
+                // remove unused enum values
+                for (int i = pairs.arraySize - 1; i >= 0; i--)
+                    if (!keysType.IsEnumDefined(pairs.GetArrayElementAtIndex(i).FindPropertyRelative("key").boxedValue))
+                        pairs.DeleteArrayElementAtIndex(i);
+
+                // add missing enum values
+                foreach (object enumValue in System.Enum.GetValues(keysType))
+                {
+                    bool hasValue = false;
+                    for (int i = 0; i < pairs.arraySize; i++)
+                    {
+                        if (pairs.GetArrayElementAtIndex(i).FindPropertyRelative("key").CompareEnumValue(enumValue))
+                        {
+                            hasValue = true;
+                            break;
+                        }
+                    }
+
+                    if (!hasValue)
+                    {
+                        pairs.InsertArrayElementAtIndex(pairs.arraySize);
+                        pairs.GetArrayElementAtIndex(pairs.arraySize - 1).FindPropertyRelative("key").SetEnumValue(enumValue);
+                    }
+                }
+            }
+
             ReorderableList reorderableList = null;
-            reorderableList = new ReorderableList(prop.serializedObject, prop.FindPropertyRelative("_pairs"),
+            reorderableList = new ReorderableList(prop.serializedObject, pairs,
                 draggable: !isEnum,
                 displayHeader: true,
                 displayAddButton: !isEnum,
@@ -160,8 +171,8 @@ namespace Ostium11.Editors
 
                 var labelWidth = EditorGUIUtility.labelWidth;
                 EditorGUIUtility.labelWidth = labelWidth / 3;
-                if (key.propertyType == SerializedPropertyType.Enum)
-                    EditorGUI.LabelField(keyRect, key.enumDisplayNames[key.enumValueIndex]);
+                if (keysType.IsEnum)
+                    EditorGUI.LabelField(keyRect, keysType.GetEnumName(key.GetEnumValue()));
                 else
                     EditorGUI.PropertyField(keyRect, key, GUIContent.none, true);
 

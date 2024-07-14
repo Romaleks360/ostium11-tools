@@ -67,5 +67,36 @@ namespace Ostium11.Editors
             }
             return parentSerializedProperty;
         }
+
+        public static object GetEnumValue(this SerializedProperty property) => property.boxedValue;
+
+        public static bool CompareEnumValue(this SerializedProperty property, object value) => property.numericType switch
+        {
+            SerializedPropertyNumericType.Int8 => property.intValue == (sbyte)value,
+            SerializedPropertyNumericType.UInt8 => property.intValue == (byte)value,
+            SerializedPropertyNumericType.Int16 => property.intValue == (short)value,
+            SerializedPropertyNumericType.UInt16 => property.intValue == (ushort)value,
+            SerializedPropertyNumericType.Int32 => property.intValue == (int)value,
+            SerializedPropertyNumericType.UInt32 => property.uintValue == (uint)value,
+            SerializedPropertyNumericType.Int64 => property.longValue == (long)value,
+            SerializedPropertyNumericType.UInt64 => property.ulongValue == (ulong)value,
+            _ => throw new System.ArgumentException("Unknown numeric type!")
+        };
+
+        public static void SetEnumValue(this SerializedProperty property, object value)
+        {
+            switch (property.numericType)
+            {
+                case SerializedPropertyNumericType.Int8: property.intValue = (sbyte)value; break;
+                case SerializedPropertyNumericType.UInt8: property.intValue = (byte)value; break;
+                case SerializedPropertyNumericType.Int16: property.intValue = (short)value; break;
+                case SerializedPropertyNumericType.UInt16: property.intValue = (ushort)value; break;
+                case SerializedPropertyNumericType.Int32: property.intValue = (int)value; break;
+                case SerializedPropertyNumericType.UInt32: property.uintValue = (uint)value; break;
+                case SerializedPropertyNumericType.Int64: property.longValue = (long)value; break;
+                case SerializedPropertyNumericType.UInt64: property.ulongValue = (ulong)value; break;
+                default: throw new System.ArgumentException("Unknown numeric type!");
+            }
+        }
     }
 }
