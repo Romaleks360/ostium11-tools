@@ -12,6 +12,7 @@ namespace Ostium11.Editors
         const float horizontalSpacing = 3f;
         const float foldoutHeaderHeight = 20f;
         const float arraySizeWidth = 48f;
+        const float keyWidthPercent = .4f;
 
         readonly Dictionary<string, ReorderableList> _reorderableLists = new();
 
@@ -102,7 +103,7 @@ namespace Ostium11.Editors
                 var keysRect = new Rect(rect)
                 {
                     x = rect.x + 15,
-                    width = rect.width * .25f
+                    width = rect.width * keyWidthPercent
                 };
 
                 var valuesRect = new Rect(keysRect)
@@ -138,8 +139,8 @@ namespace Ostium11.Editors
                 var keyRect = new Rect()
                 {
                     y = rect.y + verticalPadding * .5f,
-                    x = rect.x,
-                    width = rect.width * .25f,
+                    x = rect.x + (reorderableList.draggable ? 0 : 15),
+                    width = rect.width * keyWidthPercent + (reorderableList.draggable ? 0 : 15),
                     height = EditorGUI.GetPropertyHeight(key)
                 };
 
@@ -147,7 +148,7 @@ namespace Ostium11.Editors
                 {
                     y = keyRect.y - verticalPadding * .25f,
                     x = rect.x + horizontalSpacing + keyRect.width,
-                    width = 35,
+                    width = 25,
                 };
 
                 var valueRect = new Rect(keyRect)
@@ -157,6 +158,8 @@ namespace Ostium11.Editors
                     height = EditorGUI.GetPropertyHeight(value)
                 };
 
+                var labelWidth = EditorGUIUtility.labelWidth;
+                EditorGUIUtility.labelWidth = labelWidth / 3;
                 if (key.propertyType == SerializedPropertyType.Enum)
                     EditorGUI.LabelField(keyRect, key.enumDisplayNames[key.enumValueIndex]);
                 else
@@ -164,10 +167,9 @@ namespace Ostium11.Editors
 
                 EditorGUI.LabelField(arrowRect, new GUIContent("⟹"));
 
-                EditorGUIUtility.labelWidth /= 2;
                 var name = value.FindPropertyRelative("name")?.stringValue;
                 EditorGUI.PropertyField(valueRect, value, name == null ? GUIContent.none : new GUIContent(name), true);
-                EditorGUIUtility.labelWidth = 0;
+                EditorGUIUtility.labelWidth = labelWidth;
             }
 
             void DrawElementBackground(Rect rect, int index, bool isActive, bool isFocused)
