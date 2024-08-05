@@ -84,7 +84,7 @@ namespace Ostium11.Components
                     dragDelta = Input.GetMouseButton(1) ? mousePos - _prevMousePos : Vector2.zero,
                     altDragDelta = Input.GetMouseButton(2) ? mousePos - _prevMousePos : Vector2.zero,
                     zoomCenter = mousePos,
-                    zoomDelta = Input.mouseScrollDelta.y / 10,
+                    zoomDelta = Mathf.Clamp(Input.mouseScrollDelta.y, -1f, 1f) / 10,
                 };
 
 #if UNITY_WEBGL && !UNITY_EDITOR
