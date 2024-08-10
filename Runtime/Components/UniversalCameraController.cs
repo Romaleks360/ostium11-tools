@@ -16,6 +16,7 @@ namespace Ostium11.Components
             public Vector2 altDragDelta; // two finger / RMB drag. pixel coords
             public Vector2 zoomCenter;   // two finger median / mouse position. pixel coords
             public float zoomDelta;      // two finger pinch / mouse wheel. percentage
+            public Vector3 moveDir;      // keyboard movement
         }
 
         #region Input Mapping
@@ -43,7 +44,7 @@ namespace Ostium11.Components
             public bool TryGetInput(out InputData input);
         }
 
-        class MouseInput : IInputProvider
+        class MouseAndKeyboardInput : IInputProvider
         {
             Vector2 _prevMousePos;
             bool _enabled = true;
@@ -79,12 +80,36 @@ namespace Ostium11.Components
                     return false;
                 }
 
+                var moveDir = Vector3.zero;
+
+                if (Input.GetMouseButton(1))
+                {
+                    if (Input.GetKey(KeyCode.W))
+                        moveDir += Vector3.forward;
+                    if (Input.GetKey(KeyCode.A))
+                        moveDir += Vector3.left;
+                    if (Input.GetKey(KeyCode.S))
+                        moveDir += Vector3.back;
+                    if (Input.GetKey(KeyCode.D))
+                        moveDir += Vector3.right;
+                    if (Input.GetKey(KeyCode.E))
+                        moveDir += Vector3.up;
+                    if (Input.GetKey(KeyCode.Q))
+                        moveDir += Vector3.down;
+
+                    Vector3.ClampMagnitude(moveDir, 1);
+
+                    if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                        moveDir *= 2;
+                }
+
                 input = new InputData()
                 {
                     dragDelta = Input.GetMouseButton(1) ? mousePos - _prevMousePos : Vector2.zero,
                     altDragDelta = Input.GetMouseButton(2) ? mousePos - _prevMousePos : Vector2.zero,
                     zoomCenter = mousePos,
                     zoomDelta = Mathf.Clamp(Input.mouseScrollDelta.y, -1f, 1f) / 10,
+                    moveDir = moveDir,
                 };
 
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -196,8 +221,9 @@ namespace Ostium11.Components
 
         [SerializeField] bool _collectInput = true;
         [SerializeField] float _pivotDst = 10;
-        [SerializeField] Vector2 _pivotDstMinMax = new Vector2(1, 100);
+        [SerializeField] Vector2 _pivotDstMinMax = new(1, 100);
         [SerializeField] float _sensitivity;
+        [SerializeField] float _moveSpeed = 25;
         [SerializeField] ControlScheme _controlScheme;
         [SerializeField] Camera _cam;
 
@@ -236,7 +262,7 @@ namespace Ostium11.Components
                 _dpi = 400;
 
             _camTransform = _cam.transform;
-            _inputs = new List<IInputProvider>() { new TouchInput(), new MouseInput() };
+            _inputs = new List<IInputProvider>() { new TouchInput(), new MouseAndKeyboardInput() };
         }
 
         void OnEnable()
@@ -260,6 +286,7 @@ namespace Ostium11.Components
                 ApplyDrag(input.dragDelta, _controlScheme.dragAction);
                 ApplyDrag(input.altDragDelta, _controlScheme.altDragAction);
                 ApplyZoom(input.zoomDelta, input.zoomCenter, _controlScheme.zoomAction);
+                ApplyMove(input.moveDir);
             }
         }
 
@@ -351,6 +378,15 @@ namespace Ostium11.Components
                 var halfScreenSize = new Vector2(Screen.width / 2f, Screen.height / 2f);
                 ApplyDrag((percent - 1f) * (halfScreenSize - center) / _dpi, DragAction.MoveXY);
             }
+        }
+
+        void ApplyMove(Vector3 moveDir)
+        {
+            if (moveDir == Vector3.zero)
+                return;
+
+            _pivotDst = 0;
+            _camTransform.position += _moveSpeed * Time.deltaTime * (_camTransform.rotation * moveDir);
         }
 
         void ResetInput()
