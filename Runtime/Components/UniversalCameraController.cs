@@ -64,14 +64,16 @@ namespace Ostium11.Components
                 }
 
                 Vector2 mousePos = Input.mousePosition;
+                int dragButton = 0;
+                int altDragButton = 1;
 
-                if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2))
+                if (Input.GetMouseButtonDown(dragButton) || Input.GetMouseButtonDown(altDragButton))
                 {
                     _prevMousePos = mousePos;
                     _enabled = !EventSystem.current.IsPointerOverGameObject();
                 }
 
-                if (Input.GetMouseButtonUp(1) || Input.GetMouseButtonUp(2))
+                if (Input.GetMouseButtonUp(dragButton) || Input.GetMouseButtonUp(altDragButton))
                     _enabled = true;
 
                 if (!_enabled)
@@ -82,7 +84,7 @@ namespace Ostium11.Components
 
                 var moveDir = Vector3.zero;
 
-                if (Input.GetMouseButton(1))
+                if (Input.GetMouseButton(dragButton))
                 {
                     if (Input.GetKey(KeyCode.W))
                         moveDir += Vector3.forward;
@@ -105,8 +107,8 @@ namespace Ostium11.Components
 
                 input = new InputData()
                 {
-                    dragDelta = Input.GetMouseButton(1) ? mousePos - _prevMousePos : Vector2.zero,
-                    altDragDelta = Input.GetMouseButton(2) ? mousePos - _prevMousePos : Vector2.zero,
+                    dragDelta = Input.GetMouseButton(dragButton) ? mousePos - _prevMousePos : Vector2.zero,
+                    altDragDelta = Input.GetMouseButton(altDragButton) ? mousePos - _prevMousePos : Vector2.zero,
                     zoomCenter = mousePos,
                     zoomDelta = Mathf.Clamp(Input.mouseScrollDelta.y, -1f, 1f) / 10,
                     moveDir = moveDir,
