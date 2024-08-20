@@ -6,9 +6,10 @@ namespace Ostium11.Extensions
     {
         public static void SetWithNotification(this Toggle toggle, bool isOn)
         {
-            toggle.isOn = isOn;
-            toggle.onValueChanged?.Invoke(toggle.isOn);
+            if (toggle.isOn == isOn)
+                toggle.onValueChanged?.Invoke(isOn);
+            else
+                toggle.isOn = isOn;
         }
-
     }
 }
