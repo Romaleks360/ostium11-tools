@@ -8,8 +8,8 @@ namespace Ostium11.UI
 
     public class GestureHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        [SerializeField] float _tapTime = 0.2f;
-        [SerializeField] float _holdTime = 0.3f;
+        [SerializeField] float _tapTime = 0.1f;
+        [SerializeField] float _holdTime = 0.1f;
 
         PointerEventData _holdPointer;
 
