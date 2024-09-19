@@ -5,10 +5,18 @@ using UnityEngine.UI;
 namespace Ostium11.UI
 {
     [ExecuteAlways]
-    public class FlexibleGrid : MonoBehaviour, ILayoutGroup
+    public class FlexibleGrid : MonoBehaviour, ILayoutGroup, ILayoutElement
     {
         [SerializeField] Vector2 _cellSize = new Vector2(100, 100);
         [SerializeField] Vector2 _spacing;
+
+        public float minWidth => 0;
+        public float preferredWidth => this.rectTransform().sizeDelta.x;
+        public float flexibleWidth => 0;
+        public float minHeight => 0;
+        public float preferredHeight => this.rectTransform().sizeDelta.y;
+        public float flexibleHeight => 0;
+        public int layoutPriority => 0;
 
         void Start() => UpdateLayout();
 
@@ -22,6 +30,10 @@ namespace Ostium11.UI
         public void SetLayoutHorizontal() => UpdateLayout();
 
         public void SetLayoutVertical() { }
+
+        public void CalculateLayoutInputHorizontal() { }
+
+        public void CalculateLayoutInputVertical() { }
 
         void UpdateLayout()
         {
@@ -59,6 +71,5 @@ namespace Ostium11.UI
             float height = rows * (newCellSize.y + _spacing.y) - _spacing.y;
             this.rectTransform().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
         }
-
     }
 }
