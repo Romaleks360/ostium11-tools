@@ -86,5 +86,20 @@ namespace Ostium11.Extensions
         {
             return new Vector3(Mathf.Clamp(vector.x, min, max), Mathf.Clamp(vector.y, min, max), Mathf.Clamp(vector.z, min, max));
         }
+
+        public static Vector3 Divide(this Vector3 a, Vector3 b)
+        {
+            return new Vector3(a.x / b.x, a.y / b.y, a.z / b.z);
+        }
+
+        public static float MinComponent(this Vector3 vector)
+        {
+            return Mathf.Min(vector.x, Mathf.Min(vector.y, vector.z));
+        }
+
+        public static float MaxComponent(this Vector3 vector)
+        {
+            return Mathf.Max(vector.x, Mathf.Max(vector.y, vector.z));
+        }
     }
 }

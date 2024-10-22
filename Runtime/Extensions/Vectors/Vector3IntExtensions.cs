@@ -48,5 +48,16 @@ namespace Ostium11.Extensions
         {
             return vector;
         }
+
+        public static int MinComponent(this Vector3Int vector)
+        {
+            return Mathf.Min(vector.x, Mathf.Min(vector.y, vector.z));
+        }
+
+        public static int MaxComponent(this Vector3Int vector)
+        {
+            return Mathf.Max(vector.x, Mathf.Max(vector.y, vector.z));
+        }
+
     }
 }
