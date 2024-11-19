@@ -1,4 +1,5 @@
 using System;
+using Ostium11.Extensions;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -28,7 +29,7 @@ namespace Ostium11.UI
             if (_holdPointer == null)
                 return;
 
-            if ((_holdPointer.position - _holdPointer.pressPosition).sqrMagnitude > 1)
+            if (!_holdPointer.position.IsInsideRadius(_holdPointer.pressPosition, 50))
             {
                 _holdPointer = null;
                 return;
@@ -61,7 +62,7 @@ namespace Ostium11.UI
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if ((eventData.position - eventData.pressPosition).sqrMagnitude > 1)
+            if (!eventData.position.IsInsideRadius(eventData.pressPosition, 50))
                 return;
 
             if (Time.unscaledTime - eventData.clickTime > _tapTime)
