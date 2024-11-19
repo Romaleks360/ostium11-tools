@@ -10,5 +10,12 @@ namespace Ostium11.Extensions
                 component = go.AddComponent<T>();
             return component;
         }
+
+        public static void SetLayer(this GameObject go, int layer)
+        {
+            go.layer = layer;
+            foreach (Transform tr in go.transform)
+                SetLayer(tr.gameObject, layer);
+        }
     }
 }
