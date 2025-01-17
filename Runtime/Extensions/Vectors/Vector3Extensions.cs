@@ -62,6 +62,16 @@ namespace Ostium11.Extensions
             return new Vector2(vector.x, vector.z);
         }
 
+        public static Vector3 Floor(this Vector3 point)
+        {
+            return new Vector3(Mathf.Floor(point.x), Mathf.Floor(point.y), Mathf.Floor(point.z));
+        }
+
+        public static Vector3 Ceil(this Vector3 point)
+        {
+            return new Vector3(Mathf.Ceil(point.x), Mathf.Ceil(point.y), Mathf.Ceil(point.z));
+        }
+
         public static bool IsInsideRadius(this Vector3 point, Vector3 center, float radius)
         {
             return (point - center).sqrMagnitude <= radius * radius;
