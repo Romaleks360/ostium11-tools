@@ -19,6 +19,12 @@ namespace Ostium11.Extensions
             return @this;
         }
 
+        public static Bounds Snap(this Bounds @this, float snap)
+        {
+            @this.SetMinMax(@this.min.Snap(snap), @this.max.Snap(snap));
+            return @this;
+        }
+
         public static bool FullyContains(this Bounds @this, Bounds target)
             => @this.Contains(target.max) && @this.Contains(target.min);
     }

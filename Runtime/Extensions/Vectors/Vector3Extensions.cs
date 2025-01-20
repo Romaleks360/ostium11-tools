@@ -72,6 +72,16 @@ namespace Ostium11.Extensions
             return new Vector3(Mathf.Ceil(point.x), Mathf.Ceil(point.y), Mathf.Ceil(point.z));
         }
 
+        public static Vector3Int Sign(this Vector3 point)
+        {
+            return new Vector3Int(System.Math.Sign(point.x), System.Math.Sign(point.y), System.Math.Sign(point.z));
+        }
+
+        public static Vector3 Snap(this Vector3 point, float snap)
+        {
+            return new Vector3(Snapping.Snap(point.x, snap), Snapping.Snap(point.y, snap), Snapping.Snap(point.z, snap));
+        }
+
         public static bool IsInsideRadius(this Vector3 point, Vector3 center, float radius)
         {
             return (point - center).sqrMagnitude <= radius * radius;
