@@ -4,28 +4,28 @@ namespace Ostium11.Extensions
 {
     public static class BoundsExtensions
     {
-        public static BoundsInt ToBoundsInt(this Bounds @this)
-            => new(@this.min.RoundToVector3Int(), @this.size.RoundToVector3Int());
+        public static BoundsInt ToBoundsInt(this Bounds bounds)
+            => new(bounds.min.RoundToVector3Int(), bounds.size.RoundToVector3Int());
 
-        public static Bounds Floor(this Bounds @this)
+        public static Bounds Floor(this Bounds bounds)
         {
-            @this.SetMinMax(@this.min.Floor(), @this.max.Floor());
-            return @this;
+            bounds.SetMinMax(bounds.min.Floor(), bounds.max.Floor());
+            return bounds;
         }
 
-        public static Bounds Ceil(this Bounds @this)
+        public static Bounds Ceil(this Bounds bounds)
         {
-            @this.SetMinMax(@this.min.Ceil(), @this.max.Ceil());
-            return @this;
+            bounds.SetMinMax(bounds.min.Ceil(), bounds.max.Ceil());
+            return bounds;
         }
 
-        public static Bounds Snap(this Bounds @this, float snap)
+        public static Bounds Snap(this Bounds bounds, float snap)
         {
-            @this.SetMinMax(@this.min.Snap(snap), @this.max.Snap(snap));
-            return @this;
+            bounds.SetMinMax(bounds.min.Snap(snap), bounds.max.Snap(snap));
+            return bounds;
         }
 
-        public static bool FullyContains(this Bounds @this, Bounds target)
-            => @this.Contains(target.max) && @this.Contains(target.min);
+        public static bool FullyContains(this Bounds bounds, Bounds target)
+            => bounds.Contains(target.max) && bounds.Contains(target.min);
     }
 }
