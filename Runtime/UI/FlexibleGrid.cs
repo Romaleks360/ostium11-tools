@@ -10,6 +10,10 @@ namespace Ostium11.UI
         [SerializeField] Vector2 _cellSize = new Vector2(100, 100);
         [SerializeField] Vector2 _spacing;
 
+        int _calculatedCellCountX = 1;
+        Vector2 _calculatedCellSize;
+        bool _isDirty = false;
+
         public float minWidth => 0;
         public float preferredWidth => this.rectTransform().sizeDelta.x;
         public float flexibleWidth => 0;
@@ -17,12 +21,21 @@ namespace Ostium11.UI
         public float preferredHeight => this.rectTransform().sizeDelta.y;
         public float flexibleHeight => 0;
         public int layoutPriority => 0;
+        public Vector2 CellSize { get => _cellSize; set => _cellSize = value; }
+        public Vector2 Spacing { get => _spacing; set => _spacing = value; }
 
         void Start() => UpdateLayout();
 
         void OnRectTransformDimensionsChange() => UpdateLayout();
 
-        void OnTransformChildrenChanged() => UpdateLayout();
+        void OnTransformChildrenChanged() => _isDirty = true;
+
+        void Update()
+        {
+            if (!_isDirty) return;
+            _isDirty = false;
+            UpdateLayout();
+        }
 
 #if UNITY_EDITOR
         void OnValidate() => LayoutRebuilder.MarkLayoutForRebuild(this.rectTransform());
@@ -35,6 +48,16 @@ namespace Ostium11.UI
 
         public void CalculateLayoutInputVertical() { }
 
+        public Rect GetItemPositionAt(int index)
+        {
+            var col = index % _calculatedCellCountX;
+            var row = index / _calculatedCellCountX;
+            var size = _calculatedCellSize;
+            var pos = size + _spacing;
+            pos.Scale(new(col, row));
+            return new Rect(pos, size);
+        }
+
         void UpdateLayout()
         {
             float width = this.rectTransform().rect.width;
@@ -42,6 +65,8 @@ namespace Ostium11.UI
             float spaceLeft = width - cellCountX * (_cellSize.x + _spacing.x) + _spacing.x;
             float factor = (spaceLeft / cellCountX + _cellSize.x) / _cellSize.x;
             var newCellSize = _cellSize * factor;
+            _calculatedCellCountX = cellCountX;
+            _calculatedCellSize = newCellSize;
 
             var pivot = new Vector2(0, 1);
             var pos = Vector2.zero;
