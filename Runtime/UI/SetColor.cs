@@ -17,5 +17,11 @@ namespace Ostium11.UI
             else
                 Debug.LogError($"Invalid color index {color}");
         }
+
+        public void Set(Color color)
+        {
+            foreach (var g in _graphics)
+                g.color = color;
+        }
     }
 }
