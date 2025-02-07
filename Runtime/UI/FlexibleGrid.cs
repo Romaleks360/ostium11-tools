@@ -17,6 +17,7 @@ namespace Ostium11.UI
         public float preferredHeight => this.rectTransform().sizeDelta.y;
         public float flexibleHeight => 0;
         public int layoutPriority => 0;
+        public Vector2 CellSize { get => _cellSize; set => _cellSize = value; }
 
         void Start() => UpdateLayout();
 
