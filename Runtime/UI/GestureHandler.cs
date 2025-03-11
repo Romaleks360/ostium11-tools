@@ -9,8 +9,7 @@ namespace Ostium11.UI
 
     public class GestureHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        [SerializeField] float _tapTime = 0.1f;
-        [SerializeField] float _holdTime = 0.1f;
+        static readonly float _holdTime = 0.3f;
 
         PointerEventData _holdPointer;
 
@@ -65,7 +64,7 @@ namespace Ostium11.UI
             if (!eventData.position.IsInsideRadius(eventData.pressPosition, 50))
                 return;
 
-            if (Time.unscaledTime - eventData.clickTime > _tapTime)
+            if (Time.unscaledTime - eventData.clickTime > _holdTime)
                 return;
 
             Tap?.Invoke(eventData);
