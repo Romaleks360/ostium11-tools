@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Ostium11.Extensions
@@ -11,5 +12,11 @@ namespace Ostium11.Extensions
         public static void SetZ(this Transform transform, float z) => transform.position = transform.position.SetZ(z);
 
         public static Transform GetLastChild(this Transform transform) => transform.GetChild(transform.childCount - 1);
+
+        public static IEnumerable<Transform> GetChildren(this Transform transform)
+        {
+            foreach (Transform tr in transform)
+                yield return tr;
+        }
     }
 }
