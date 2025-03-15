@@ -1,7 +1,9 @@
 {
     "name": "Ostium11",
     "rootNamespace": "Ostium11",
-    "references": [],
+    "references": [
+        "UniTask"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
