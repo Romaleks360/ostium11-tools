@@ -222,6 +222,12 @@ namespace Ostium11.Components
 
         public Camera Camera => _cam;
 
+        public float MoveSpeed
+        {
+            get => _moveSpeed;
+            set => _moveSpeed = value;
+        }
+
         public float PivotDistance
         {
             get => _pivotDst;
