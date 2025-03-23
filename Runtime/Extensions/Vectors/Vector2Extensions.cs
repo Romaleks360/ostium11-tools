@@ -10,9 +10,18 @@ namespace Ostium11.Extensions
         /// </summary>
         public static float Angle(this Vector2 from, Vector2 to)
         {
-            float signedAngle = Mathf.Atan2(to.y - from.y, to.x - from.x) * Mathf.Rad2Deg;
+            float signedAngle = AngleSigned(from, to);
             return (signedAngle < 0) ? signedAngle + 360 : signedAngle;
             // return ((signedAngle < 0) ? signedAngle + 360 : signedAngle) * -1 + 90;
+        }
+
+        /// <summary>
+        /// Returns an unsigned angle between two points
+        /// (as opposed to Vector2.Angle, that returns an angle between two directions) 
+        /// </summary>
+        public static float AngleSigned(this Vector2 from, Vector2 to)
+        {
+            return Mathf.Atan2(to.y - from.y, to.x - from.x) * Mathf.Rad2Deg;
         }
 
         /// <summary>
