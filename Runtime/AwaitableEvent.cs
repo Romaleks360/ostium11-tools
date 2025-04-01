@@ -1,6 +1,4 @@
-#if OSTIUM11_UNITASK_SUPPORT
 using Cysharp.Threading.Tasks;
-#endif
 using System;
 
 namespace Ostium11
@@ -13,7 +11,6 @@ namespace Ostium11
         public void Subscribe(Action callback) => _event += callback;
         public void Unsubscribe(Action callback) => _event -= callback;
 
-#if OSTIUM11_UNITASK_SUPPORT
         public UniTask.Awaiter GetAwaiter()
         {
             UniTaskCompletionSource tcs = new();
@@ -27,7 +24,6 @@ namespace Ostium11
             Subscribe(Callback);
             return tcs.Task.GetAwaiter();
         }
-#endif
     }
 
     public class AwaitableEvent<T>
@@ -38,7 +34,6 @@ namespace Ostium11
         public void Subscribe(Action<T> callback) => _event += callback;
         public void Unsubscribe(Action<T> callback) => _event -= callback;
 
-#if OSTIUM11_UNITASK_SUPPORT
         public UniTask<T>.Awaiter GetAwaiter()
         {
             UniTaskCompletionSource<T> tcs = new();
@@ -52,6 +47,5 @@ namespace Ostium11
             Subscribe(Callback);
             return tcs.Task.GetAwaiter();
         }
-#endif
     }
 }

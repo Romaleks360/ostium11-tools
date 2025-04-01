@@ -39,14 +39,12 @@ namespace Ostium11
             _changed.Invoke(value);
         }
 
-#if OSTIUM11_UNITASK_SUPPORT
         public async UniTask WaitForChange() => await _changed;
         public async UniTask WaitForValue(T value)
         {
             while (!_value.Equals(value))
                 await _changed;
         }
-#endif
 
         public bool Equals(T other) => _value.Equals(other);
 

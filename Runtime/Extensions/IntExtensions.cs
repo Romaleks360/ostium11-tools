@@ -17,8 +17,6 @@ namespace Ostium11.Extensions
             return val >= 0 && val < maxExclusive;
         }
 
-#if OSTIUM11_UNITASK_SUPPORT
         public static UniTask.Awaiter GetAwaiter(this int milliseconds) => UniTask.Delay(milliseconds).GetAwaiter();
-#endif
     }
 }
