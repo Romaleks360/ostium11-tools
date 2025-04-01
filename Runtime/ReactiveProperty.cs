@@ -40,11 +40,8 @@ namespace Ostium11
         }
 
         public async UniTask WaitForChange() => await _changed;
-        public async UniTask WaitForValue(T value)
-        {
-            while (!_value.Equals(value))
-                await _changed;
-        }
+        public async UniTask WaitForValue(T value) { while (!_value.Equals(value)) await _changed; }
+        public async UniTask WaitForValue(Func<T, bool> predicate) { while (!predicate(_value)) await _changed; }
 
         public bool Equals(T other) => _value.Equals(other);
 
