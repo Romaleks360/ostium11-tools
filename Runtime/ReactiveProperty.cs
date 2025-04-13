@@ -1,7 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Ostium11
 {
@@ -9,7 +8,8 @@ namespace Ostium11
     public class ReactiveProperty<T> : IEquatable<T> where T : IEquatable<T>
     {
         [SerializeField] T _value = default;
-        [SerializeField] UnityEvent<T> _changed = new();
+
+        readonly AwaitableEvent<T> _changed = new();
 
         public T Value
         {
@@ -27,8 +27,8 @@ namespace Ostium11
         public ReactiveProperty() { }
         public ReactiveProperty(T value) => _value = value;
 
-        public void Subscribe(UnityAction<T> callback) => _changed.AddListener(callback);
-        public void Unsubscribe(UnityAction<T> callback) => _changed.RemoveListener(callback);
+        public void Subscribe(Action<T> callback) => _changed.Subscribe(callback);
+        public void Unsubscribe(Action<T> callback) => _changed.Unsubscribe(callback);
         public void RaiseNotification() => _changed.Invoke(_value);
 
         public void Set(T value) => Value = value;

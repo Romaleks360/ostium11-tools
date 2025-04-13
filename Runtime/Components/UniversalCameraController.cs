@@ -96,8 +96,8 @@ namespace Ostium11.Components
 
                 input = new InputData()
                 {
-                    dragDelta = Input.GetMouseButton(0) ? Input.mousePositionDelta : Vector2.zero,
-                    altDragDelta = Input.GetMouseButton(2) ? Input.mousePositionDelta : Vector2.zero,
+                    dragDelta = Input.GetMouseButton(0) ? new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) : Vector2.zero,
+                    altDragDelta = Input.GetMouseButton(2) ? new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) : Vector2.zero,
                     zoomCenter = Input.mousePosition,
                     zoomDelta = Mathf.Clamp(Input.mouseScrollDelta.y, -1f, 1f) / 10,
                     moveDir = moveDir,
