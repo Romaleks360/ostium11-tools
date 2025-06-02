@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Ostium11.Extensions;
+using Ostium11.TimerTasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -219,8 +220,10 @@ namespace Ostium11.Components
         Transform _camTransform;
         List<IInputProvider> _inputs;
         Transform _stickTarget;
+        UpdateType _updateType = UpdateType.Late;
 
         public Camera Camera => _cam;
+        public UpdateType UpdateType { get => _updateType; set => _updateType = value; }
 
         public float MoveSpeed
         {
@@ -265,7 +268,25 @@ namespace Ostium11.Components
             // clear inertia
         }
 
+        void Update()
+        {
+            if (_updateType == UpdateType.Normal)
+                Tick();
+        }
+
         void LateUpdate()
+        {
+            if (_updateType == UpdateType.Late)
+                Tick();
+        }
+
+        private void FixedUpdate()
+        {
+            if (_updateType == UpdateType.Fixed)
+                Tick();
+        }
+
+        public void Tick()
         {
             if (_stickTarget != null)
             {
