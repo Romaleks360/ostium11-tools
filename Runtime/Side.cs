@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Ostium11
@@ -14,6 +15,16 @@ namespace Ostium11
 
     public static class SideExtensions
     {
+        static readonly Dictionary<Vector3, Quaternion> _lookRotationTable = new()
+        {
+            [Vector3.left] = Quaternion.Inverse(Quaternion.LookRotation(Vector3.left)),
+            [Vector3.right] = Quaternion.Inverse(Quaternion.LookRotation(Vector3.right)),
+            [Vector3.up] = Quaternion.Inverse(Quaternion.LookRotation(Vector3.up)),
+            [Vector3.down] = Quaternion.Inverse(Quaternion.LookRotation(Vector3.down)),
+            [Vector3.forward] = Quaternion.Inverse(Quaternion.LookRotation(Vector3.forward)),
+            [Vector3.back] = Quaternion.Inverse(Quaternion.LookRotation(Vector3.back)),
+        };
+
         public static Vector3 ToVector3(this Side side) => side switch
         {
             Side.Left => Vector3.left,
@@ -24,5 +35,10 @@ namespace Ostium11
             Side.Back => Vector3.back,
             _ => default
         };
+
+        /// <summary>
+        /// Works only for normalized straight directional vector (forward, right, up...)
+        /// </summary>
+        public static Quaternion InverseLookRotation(this Vector3 vector) => _lookRotationTable[vector];
     }
 }
