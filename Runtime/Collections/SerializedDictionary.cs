@@ -31,6 +31,12 @@ namespace Ostium11
                 _pairs.Add(new Pair(k, v));
         }
 
+        public void CopyTo(SerializedDictionary<TKey, TValue> dest)
+        {
+            foreach (var (k, v) in this)
+                dest.Add(k, v);
+        }
+
         [System.Serializable]
         struct Pair
         {
