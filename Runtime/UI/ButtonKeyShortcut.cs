@@ -24,10 +24,7 @@ namespace Ostium11.UI
             }
 
             if (justPressed)
-            {
-                _buttonToPress.Select();
                 _buttonToPress.onClick.Invoke();
-            }
         }
 
         void Reset()
