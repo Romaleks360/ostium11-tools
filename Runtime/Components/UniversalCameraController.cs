@@ -175,7 +175,7 @@ namespace Ostium11.Components
                     var pinchPos = (touchPos1 + touchPos2) / 2;
                     var dst = (touchPos1 - touchPos2).magnitude;
 
-                    if (_prevPinchPos != null)
+                    if (_prevPinchPos != null && _prevPinchPos.Value.z > 0.01f)
                     {
                         altDragDelta = pinchPos - _prevPinchPos.Value.GetXY();
                         zoomDelta = dst / _prevPinchPos.Value.z - 1f;
