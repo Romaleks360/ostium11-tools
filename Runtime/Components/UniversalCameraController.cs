@@ -166,16 +166,24 @@ namespace Ostium11.Components
                         return false;
                     }
 
-                    var altDragDelta = Vector2.zero;
-                    var zoomDelta = 0f;
-
                     var touchPos1 = Input.GetTouch(0).position;
                     var touchPos2 = Input.GetTouch(1).position;
 
-                    var pinchPos = (touchPos1 + touchPos2) / 2;
                     var dst = (touchPos1 - touchPos2).magnitude;
 
-                    if (_prevPinchPos != null && _prevPinchPos.Value.z > 0.01f)
+                    if (dst > 9000) // iOS WebGL pinch bug fix
+                    {
+                        _prevTouchPos = null;
+                        _prevPinchPos = null;
+                        input = new InputData();
+                        return false;
+                    }
+
+                    var pinchPos = (touchPos1 + touchPos2) / 2;
+                    var altDragDelta = Vector2.zero;
+                    var zoomDelta = 0f;
+
+                    if (_prevPinchPos != null)
                     {
                         altDragDelta = pinchPos - _prevPinchPos.Value.GetXY();
                         zoomDelta = dst / _prevPinchPos.Value.z - 1f;
