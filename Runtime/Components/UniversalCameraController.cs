@@ -224,6 +224,7 @@ namespace Ostium11.Components
         [SerializeField] ControlScheme _controlScheme;
         [SerializeField] Camera _cam;
 
+        bool _isInitialized;
         int _dpi;
         Transform _camTransform;
         List<IInputProvider> _inputs;
@@ -260,15 +261,20 @@ namespace Ostium11.Components
             }
         }
 
-        void Awake()
+        public void Initialize()
         {
-            _dpi = (int)Screen.dpi;
-            if (_dpi <= 0)
-                _dpi = 400;
+            if (_isInitialized)
+                return;
 
-            _camTransform = _cam.transform;
-            _inputs = new List<IInputProvider>() { new TouchInput(), new MouseAndKeyboardInput() };
-        }
+			_dpi = (int)Screen.dpi;
+			if (_dpi <= 0)
+				_dpi = 400;
+
+			_camTransform = _cam.transform;
+			_inputs = new List<IInputProvider>() { new TouchInput(), new MouseAndKeyboardInput() };
+		}
+
+        void Awake() => Initialize();
 
         void OnEnable()
         {
